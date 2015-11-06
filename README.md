@@ -19,7 +19,8 @@ This repository is reproducible with the following steps:
 Now you're good to go. Start emacs and load the config file:
 
 ```
-$ =emacs -Q
+$ cd /path/to/tcrug_org-mode
+$ =emacs -l ./.emacs-config
 $ M-x load-file /path/to/tcrug_org-mode/.emacs-config
 ```
 
