@@ -1,0 +1,14 @@
+#+startup: lognotestate
+#+OPTIONS: *:t TeX:t LaTeX:t H:5 creator:nil toc:nil num:nil
+#+latex_header: \usepackage[hmargin=2.5cm,vmargin=2.5cm]{geometry}
+#+latex_header: \usepackage{mathpazo} \usepackage{paralist}
+#+latex_header: \usepackage{enumitem}
+#+latex_header: \usepackage{amsmath}
+#+latex_header: \usepackage{tikz}
+#+latex_header: \usetikzlibrary{shapes, positioning}
+#+latex_header: \setlength{\parskip}{0.5cm} \setlength{\parindent}{0cm}
+#+latex_header: \usepackage{lscape}
+#+latex_header: \usepackage{booktabs}
+#+latex_header: \hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+#+html_head: <link rel="stylesheet" type="text/css" href="http://tinyurl.com/77t76qa" />
+#+columns: %8CATEGORY(category) %50ITEM(title) %14SCHEDULED(scheduled) %14DEADLINE(deadline) %10TAGS(tags)

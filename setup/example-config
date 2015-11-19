@@ -1,0 +1,5 @@
+(add-to-list 'load-path "./libs/org-mode/lisp/")
+(add-to-list 'load-path "./libs/org-mode/contrib/lisp")
+(add-to-list 'load-path "./libs/ess/lisp/")
+(add-to-list 'load-path "./libs/org-reveal/")
+(add-to-list 'load-path "./libs/orgmode-accessories/")

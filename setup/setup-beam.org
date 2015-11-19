@@ -1,0 +1,11 @@
+#+options: toc:nil latex:t tex:t H:1 tags:nil reveal_center:nil num:nil
+#+latex_class: beamer
+#+latex_class_options: [aspectratio=169,presentation,bigger,fleqn,t]
+#+latex_header: \usetheme[frametitleformat=lowercase,numbering=none]{m}
+#+latex_header: \setbeamerfont{frametitle}{shape=\upshape}
+#+latex_header: \usepackage{FiraSans} 
+#+latex_header: \usepackage{setspace} 
+#+latex_header: \setstretch{1.3}
+#+latex_header: \usepackage{booktabs}
+#+latex_header: \hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+#+reveal_hlevel 1

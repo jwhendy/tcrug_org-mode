@@ -1,0 +1,408 @@
+#+setupfile: "./setup/setupfile.org"
+#+title: R + Org-mode = awesome!
+#+subtitle: Org-mode for science, reproducible research, and organization
+#+date: 2015 November
+#+author: John Henderson
+#+email: jw.hendy@gmail.com
+#+select_tags: article
+#+PROPERTY: header-args:elisp :tangle ./setup/example-config
+
+* todos								   :noexport:
+** todo decide on content
+   :LOGBOOK:
+   CLOCK: [2015-11-18 Wed 20:01]--[2015-11-18 Wed 20:04] =>  0:03
+   CLOCK: [2015-11-05 Thu 22:51]--[2015-11-05 Thu 22:57] =>  0:06
+   CLOCK: [2015-11-05 Thu 21:30]--[2015-11-05 Thu 22:02] =>  0:32
+   :END:
+
+- what do you want to cover?
+- what's core vs. "extra"
+- how much "extra" is reasonable as to not overwhelm
+
+[2015-11-16 Mon]
+How about one slide or demo thingy per feature?
+
+*** potential topic list
+- [-] how I started to use Org. background on other solutions investigated, why Org-mode
+  is awesome, what I do with it...
+- [-] markdown overview
+- [-] super core keyboard shortcuts
+- [-] managing todos/actions
+- [ ] using org for notes/documenting work
+  - [ ] directory structure I tend to use
+  - [ ] reusing chunks/code output in other documents
+  - [ ] typical flow of analysis/document generation
+- [-] where to get help (mailing list, worg, manual)
+- [-] gorgeous exports/power of latex, multiple formats
+- [-] org-mode compared to RStudio
+- [ ] orgmode specific dir vs. dedicated folder for reports/analysis
+- [ ] helpful text-based file manager
+- [ ] some of the power of emacs (navigation, rectangles, regexp
+- [ ] pros/cons?
+- [ ] exporting flexibly to other formats
+- [ ] maybe reference things you've heard of but not used? gnus, the analog to zotero,
+  helm, ledger, magit, others??
+
+*** potential feature list
+- [ ] todos
+- [ ] checklists
+- [ ] clocking
+- [ ] code blocks
+- [ ] inline code
+- [ ] conditional export (export/noexport tags, :eval)
+- [ ] export to various formats
+- [ ] capture
+- [ ] archiving
+- [ ] links (internal/external)
+- [ ] tags
+- [ ] drawers/properties
+- [ ] tangling
+- [ ] tikz
+- [ ] export option lines & fine tuning
+- [ ] org-contacts?
+- [ ] taskjuggler
+- [ ] regexp
+- [ ] renaming lots of files with sunrise
+- [ ] tables (normal + ascii packages)
+- [ ] refile
+- [ ] agenda (views, editing, visiting/returning)
+- [ ] tag/keyword search
+- [ ] filter/sparse trees
+- [ ] emacs -batch to run stuff via cron/elsewhere (for agenda conky)
+- [ ] git integration
+- [ ] emacs panes
+- [ ] rectanbles?
+
+** todo outline
+   :LOGBOOK:
+   CLOCK: [2015-11-18 Wed 19:56]--[2015-11-18 Wed 20:01] =>  0:05
+   :END:
+
+- [ ] write article version first
+  - section per feature you want to demonstrate
+  - perhaps make navigatable with emacs/org presentation mode?
+  - include relevant config options in tanglable src blocks?
+  - perhaps include links or references to relevant variables
+  - at end, demo an example of data analysis, export to report/pres, folder structure, and
+    anything else around reproducible research
+  - mention of inventor and some contributors?
+** todo write content
+   :LOGBOOK:
+   CLOCK: [2015-11-18 Wed 20:10]--[2015-11-18 Wed 21:40] =>  1:30
+   :END:
+** todo migrate/anonymize example data set 
+ [2015-11-05 Thu]
+** todo setup slides/sections for each item from content 
+ [2015-11-05 Thu]
+** todo look into pdf/html separate export options 
+ [2015-11-05 Thu]
+
+I've seen hooks or something where you can generate, for example, a =.png= when using the
+html export engine vs. =.pdf= for LaTeX.
+** todo make sure sunrise works
+** todo add deps to readme
+
+- sunrise.el
+- ess (http://ess.r-project.org/index.php?Section=download)
+- org-reveal (https://github.com/yjwen/org-reveal)
+- org-ravel (https://github.com/chasberry/orgmode-accessories)
+- others?
+
+** todo keyboard shortcut reference for beginners?
+** todo verify exports
+
+- article
+- beamer
+- html
+- reveal
+- slidify?
+
+** todo setup directories (./data, ./plots)
+** todo test idea of an article/beamer/html section based on select_tags
+** done get minimal working beamer/slidify/reveal tree
+   CLOSED: [2015-11-17 Tue 02:05]
+   :LOGBOOK:
+   CLOCK: [2015-11-16 Mon 23:25]--[2015-11-17 Tue 01:05] =>  1:40
+   CLOCK: [2015-11-16 Mon 22:52]--[2015-11-16 Mon 23:17] =>  0:25
+   :END:
+
+Mostly decent. Definitely not easy to do all three in one. Probably best to split them up
+into separate files as the beamer options don't seem to play well with reveal/slidify,
+particularly columns.
+
+[[http://stackoverflow.com/questions/15625990/how-to-set-size-for-local-image-using-knitr-for-markdown][This]] was helpful for images in slidify. Since markdown doesn't work so hot with image
+sizes, the suggestion was to use the =png= and =grid= packages to simply "plot" the image
+so that plot size options could be passed... like so:
+
+#+begin_example
+
+```{r fig.width=1, fig.height=10,echo=FALSE}
+
+library(png)
+library(grid)
+img <- readPNG(path/to/your/image)
+grid.raster(img)
+
+```
+#+end_example
+
+* setup								   :noexport:
+
+#+begin_src R :session r :exports none :results silent :eval yes 
+library(ggplot2)
+library(reshape2)
+library(plyr)
+library(ascii)
+
+#+end_src
+
+
+
+
+* time								   :noexport:
+
+#+BEGIN: clocktable :maxlevel 2 :scope file
+#+CAPTION: Clock summary at [2015-11-06 Fri 08:37]
+| Headline                   | Time   |      |
+|----------------------------+--------+------|
+| *Total time*               | *0:38* |      |
+|----------------------------+--------+------|
+| todos                      | 0:38   |      |
+| \_  todo decide on content |        | 0:38 |
+#+END:
+
+* Using this document
+
+This file is meant to serve as a living Org-mode tutorial. You can see the code, options,
+and markup that relate to each feature and actually try them out. And don't worry, there's
+a backup version, =demo-backup.org=, so feel free to play around!
+
+I would /highly/ recommend that you follow these next setup steps exactly. They will
+reproduce an Org-mode setup that should work out of the box, /if/ the instructions are
+followed. A lot of issues relate to configuration file options and settings in the
+file. Creating a valid setup locally in this directory will allow you to better
+troubleshoot if and when you migrate to a global system setup.
+
+* Installation and setup
+
+You'll need to download and/or install all of the following for the entirety of this
+document to work. If it's not obvious, you'll definitely be needing [[https://www.gnu.org/software/emacs/#Obtaining][Emacs installed]]... For
+data analysis/code demonstrations, I'll be using [[https://cran.rstudio.com/][=R=]]. Lastly, to export to \LaTeX for
+documents and Beamer presentation, you'll need a distribution like [[https://www.tug.org/texlive/][TexLive]] or [[http://miktex.org/][MiKTeX]]. I
+could try and list all of the required packages, but it will honestly be easier to export
+to \LaTeX, manually run =$ pdflatex exported-file.tex=, and watch for the error output in
+order to identify what to install (with e.g. =tlmgr install package_name= for TexLive).
+
+From there, grab all of these and put them somewehere (I use =~/.elisp/site-lisp/=):
+
+#+begin_src sh :exports results :results silent :eval no
+
+# If you'd like, uncomment the next line and change the directory to point
+# somewhere (existing or newly created) these all can live.
+DIR="/mnt/vault/personal/presentations/tcrug_org-mode/libs/"
+
+cd $DIR
+
+# now we clone some repositories and download sunrise
+git clone git://orgmode.org/org-mode.git &&
+git clone https://github.com/emacs-ess/ESS.git
+git clone https://github.com/hakimel/reveal.js.git &&
+git clone https://github.com/chasberry/orgmode-accessories.git &&
+git clone https://github.com/yjwen/org-reveal.git &&
+wget http://www.emacswiki.org/emacs/sunrise-commander.el
+
+#+end_src
+
+To use these libraries, we need to both tell Emacs about the directories and load the
+packages. Since we're at it, I'm loading all of the desired libraries here, as well as
+telling Org-mode about the languages we might use for code in the document.
+
+#+begin_src elisp
+
+;; adding the directories we created above to the path
+(add-to-list 'load-path "./libs/org-mode/lisp/")
+(add-to-list 'load-path "./libs/org-mode/contrib/lisp")
+(add-to-list 'load-path "./libs/ess/lisp/")
+(add-to-list 'load-path "./libs/org-reveal/")
+(add-to-list 'load-path "./libs/orgmode-accessories/")
+
+;; these libraries are all related to exporting
+(require 'ox-latex)
+(require 'ox-html)
+(require 'ox-beamer)
+(require 'ox-md)
+(require 'ox-odt)
+(require 'ox-reveal)
+(require 'ox-ravel)
+
+;; ESS is needed for R code execution
+(require 'ess-site)
+
+;; we'll use sunrise-commmander for a text-based file manager
+(require 'sunrise-commander)
+
+;; these enable some cool Org-mode features turned off by default
+(require 'org-inlinetask)
+(require 'org-id)
+(require 'org-clock)
+
+#+end_src
+
+
+
+
+
+* Overview
+
+My name is John Henderson, and I work in Product Development at 3M. This document will
+summarize some features of and use cases for the open source software, Org-mode, a major mode
+for the Emacs text-editor.[fn:1] [fn:2] My aim is to provide an fairly wide overview of
+Org within the context of conducting work in science and technology. Org is certainly relevant to
+anyone, but it's feature set is particularly well-suited for recording information,
+planning/documenting experiments, data analysis, and document generation (all common
+activities in STEM work).
+
+I originally intended to write a simple overview of Org for a presentation at an R user
+group event, but thought that others might benefit from expanding on that overview. Thus,
+I've decided to turn this into something like a "quick start/crash course" on
+Org-mode. You'll learn about the features, but also some relevant settings related to the
+features, and have a complete config file (a version of my own) to use as a starting
+point. Lastly, this file will serve as the demo for the features, so you can learn from
+seeing them in action.
+
+* The life of a product developer
+
+I work in collision repair products, and my division makes products for every aspect of
+the process: body fillers, adhesives, heavy abrasives, masking products, paint guns/nozzles/cup
+systems, compounds and polishes, and consumer products. I'd /like/ to say my job consists
+of coming up with ideas, trying things out, collecting and analyzing
+data, using that knowledge for the next iteration, and eventually launching a finished
+product. Those steps are certainly involved, but my life /also/ involves a hefty dose of
+meetings, emails and phone calls, keeping track of various bits of information, compliance
+courses, lots of todos/deadlines, volunteering activities, and other general miscellany.
+
+I've always been a note-taker, and quite enjoyed writing up experimental results when I
+joined 3M (especially when they were successful). I take pride in my work and love a nice,
+polished looking document to communicate it. Prior to the transition to a "First to file"
+system, we were required to document experiments in a witnessed technical notebook.[fn:3] I
+started hunting around for good ways to keep good records of my work. I had some ideas
+about what I would and wouldn't like in some potential solution:
+- I don't really care for general notes scattered all over the place so that I have to
+  re-figure-out where my past self decided to stash the file
+- I needed something flexible to house the various forms accompanying information might
+  take (e.g. pictures, links, email fragments, tables, math, contact info, etc.)
+- I wanted to use the system to print out "notebook entries" to tape into my technical
+  notebook so I didn't have to write everything by hand, so I needed a printable output
+- Some sort of categorization or linking ability, since I'm often building on previous
+  efforts and it's nice to easily refer back to previous data/results.
+
+I tried zim, but for some reason I can't recall, I didn't care for it; it might have
+simply been the user interface/appearance.[fn:4] I also looked into Evernote, but found I
+didn't like it that much either.[fn:5] I also don't recall the exact reasons, but I have
+vague recollection of disliking how it handled inserted images, formatting, and possibly
+the organization of entries.
+
+It doesn't matter much, as regardless of the reasons, they would have both been beaten
+by TiddlyWiki (TW).[fn:6] If you never take to Org-mode, /please/ give TiddlyWiki a try. I
+loved how easy it was to quickly file information that stayed out of the way until I
+searched for it. There were plugins that also let me flexibly extract/sort information
+into lists due to the fact that it's a wiki. In contrast, text in a Word document lives in
+one specific place; to use it again, you need to copy and paste it into some other
+document. With TiddlyWiki, it can be reused again and again for free. With tags and
+titling starting with date, I could create project based or chronological views (and the
+same entry/contents in both lists). This was quite nice for, say, recalling work done
+throughout the year for a review (chronological) or the order of experiments for a
+specific project (tag based). I liked that you wrote in markup so it was easy to change
+font format and copy/paste things in  without having to reformat (vs. Word, where pasted text
+maintains it's font size/style and needs to be changed to match the document).
+
+Around this time, I began a parallel search for task/scheduling software, something to
+manage my time and actions. Boy did I try a lot of things: [[http://todotxt.com/][=todo.txt=]], [[https://en.wikipedia.org/wiki/Chandler_(software)][Chandler]], [[https://itunes.apple.com/us/app/igtd/id488595283?mt=8][iGTD]],
+[[https://github.com/TracksApp/tracks][Tracks]] and several others. I liked iGTD when I was using a Mac, and really tried to like
+Chandler, as it seemed to have a lot of potential (they were working toward integrating
+todos/calendar/email), but wasn't sold on any of them entirely. I don't think this was the
+fault of any app, but of the nature of tracking todos: they often come up in the context
+of something else. If I'm in a meeting taking notes and I think of soemthing I want to do,
+I have to switch to my todo app and enter it. Perhaps it's to conduct an experiment and I
+want to lay out a quick summary of the variables I want to tweak. When I go to do the
+experiment, I'll probably re-use the note portion of the todo in some eventual output
+(analysis/report/presentation). When I'm done, I need to go find it in the todo app and
+mark it done so it goes away. What if down the road I want to remember which meeting I was
+in when I had the idea so I can look at the notes? I might remember the name of the todo
+for searching my todo app, but I don't know what I called the meeting in my notes app.
+
+Things like this are relatiely minor, but they bothered me and I started looking for
+solutions that integrated notes and todos. Since I was already using TiddlyWiki for notes,
+I wondered if someone might be using it for task management via a plugin. That's when I
+found [[http://static.hawksworx.com/playground/teamtasks/index.html][TeamTasks]], a task management system for TW. I also found the TiddlyWiki Address
+Book, which I can't find online anymore. Things were looking quite good, and I could keep
+everything surrounding general information management in one location. At some point,
+likely when looking for notes + tasks applications, I read about Org-mode. I remember
+trying it at one point for perhaps 2 weeks and just giving up. I felt so clumsy in Emacs,
+no idea how to open or save file, having a message spit out at me in the minibuffer and
+having no idea how to just get back to typing.
+
+
+
+* Taking notes
+
+
+
+* but what the hell does emacs have to do with it?
+
+Believe it or not, I /learned Emacs/ for =org-mode=. To date, it's the /only/ solution I'm
+aware of that allows for all of the following in one place:
+- notes
+- todos/time stamping/deadlines
+- tags
+- embedded code + execution
+- export to multiple formats, with images, links, table of contents, automatically
+  generated code blocks and/or results...
+
+\pause
+
+/Pretty cool!/
+
+* compared to other solutions
+
+  - [[https://www.rstudio.com/][RStudio]]?
+
+
+** todos 						      :B_block:BMCOL:
+   :PROPERTIES:
+   :BEAMER_env: block
+   :BEAMER_col: 0.5
+   :END:
+
+- [[http://todotxt.com/][=todo.txt=]]
+- [[https://en.wikipedia.org/wiki/Chandler_(software)][Chandler]] 
+- [[https://itunes.apple.com/us/app/igtd/id488595283?mt=8][iGTD]] 
+- [[http://tiddlywiki.com/][TiddlyWiki]]
+
+* ok, so what is it?
+
+=Org-mode= is a major mode for the Emacs text editor.
+- it uses markup to allow for structuring
+
+#+begin_example
+
+,* ok, so what is it?                          # heading
+
+=Org-mode= is a major mode for the Emacs text editor.
+- it uses markup to allow for structuring     # unordered list
+
+#+end_example
+
+* Footnotes
+
+[fn:6] TiddlyWiki home page: http://tiddlywiki.com/ 
+
+[fn:5] Evernote home page: https://evernote.com/?var=1 
+
+[fn:4] Zim home page: http://zim-wiki.org/ 
+
+[fn:3] Wikipedia on first to file and first to invent: https://en.wikipedia.org/wiki/First_to_file_and_first_to_invent 
+
+[fn:2] GNU Emacs home page: https://www.gnu.org/software/emacs/ 
+
+[fn:1] Org-mode home page: http://orgmode.org/

@@ -1,0 +1,266 @@
+#+setupfile: "./setup/setup-beam.org"
+#+startup: beamer
+#+title: R + Org-mode = awesome!
+#+date: 2015 November
+#+author: John Henderson
+#+email: jw.hendy@gmail.com
+#+select_tags: article
+
+#+begin_html 
+<style type="text/css">
+.reveal .slides { text-align: left; }
+.reveal .slides .section>* { margin-left: 0; margin-right: 0; }
+</style>
+#+end_html
+
+* todos								   :noexport:
+** todo decide on content
+   :LOGBOOK:
+   CLOCK: [2015-11-05 Thu 22:51]--[2015-11-05 Thu 22:57] =>  0:06
+   CLOCK: [2015-11-05 Thu 21:30]--[2015-11-05 Thu 22:02] =>  0:32
+   :END:
+
+- what do you want to cover?
+- what's core vs. "extra"
+- how much "extra" is reasonable as to not overwhelm
+
+[2015-11-16 Mon]
+How about one slide or demo thingy per feature?
+
+*** potential topic list
+- [-] how I started to use Org. background on other solutions investigated, why Org-mode
+  is awesome, what I do with it...
+- [-] markdown overview
+- [-] super core keyboard shortcuts
+- [-] managing todos/actions
+- [ ] using org for notes/documenting work
+  - [ ] directory structure I tend to use
+  - [ ] reusing chunks/code output in other documents
+  - [ ] typical flow of analysis/document generation
+- [-] where to get help (mailing list, worg, manual)
+- [-] gorgeous exports/power of latex
+- [-] org-mode compared to RStudio
+- [ ] orgmode specific dir vs. dedicated folder for reports/analysis
+- [ ] helpful text-based file manager
+- [ ] pros/cons?
+- [ ] exporting flexibly to other formats
+- [ ] maybe reference things you've heard of but not used? gnus, the analog to zotero,
+  helm, ledger, magit, others??
+
+*** potential feature list
+- [ ] todos
+- [ ] checklists
+- [ ] clocking
+- [ ] code blocks
+- [ ] inline code
+- [ ] conditional export (export/noexport tags, :eval)
+- [ ] export to various formats
+- [ ] capture
+- [ ] archiving
+- [ ] links (internal/external)
+- [ ] tags
+- [ ] drawers/properties
+- [ ] tangling
+- [ ] tikz
+- [ ] export option lines & fine tuning
+- [ ] org-contacts?
+- [ ] taskjuggler
+- [ ] regexp
+- [ ] renaming lots of files with sunrise
+- [ ] tables (normal + ascii packages)
+- [ ] refile
+- [ ] agenda (views, editing, visiting/returning)
+- [ ] tag/keyword search
+- [ ] filter/sparse trees
+- [ ] emacs -batch to run stuff via cron/elsewhere
+- [ ] git integration
+
+** todo outline
+   :LOGBOOK:
+   CLOCK: [2015-11-18 Wed 19:56]
+   :END:
+
+- [ ] write article version first
+  - section per feature you want to demonstrate
+  - perhaps make navigatable with emacs/org presentation mode?
+  - include relevant config options in tanglable src blocks?
+  - perhaps include links or references to relevant variables
+  - at end, demo an example of data analysis, export to report/pres, folder structure, and
+    anything else around reproducible research
+  - mention of inventor and some contributors?
+
+** todo migrate/anonymize example data set 
+ [2015-11-05 Thu]
+** todo setup slides/sections for each item from content 
+ [2015-11-05 Thu]
+** todo look into pdf/html separate export options 
+ [2015-11-05 Thu]
+
+I've seen hooks or something where you can generate, for example, a =.png= when using the
+html export engine vs. =.pdf= for LaTeX.
+** todo make sure sunrise works
+** todo add deps to readme
+
+- sunrise.el
+- ess (http://ess.r-project.org/index.php?Section=download)
+- org-reveal (https://github.com/yjwen/org-reveal)
+- org-ravel (https://github.com/chasberry/orgmode-accessories)
+- others?
+
+** todo keyboard shortcut reference for beginners?
+** todo verify exports
+
+- article
+- beamer
+- html
+- reveal
+- slidify?
+
+** todo setup directories (./data, ./plots)
+** todo test idea of an article/beamer/html section based on select_tags
+** done get minimal working beamer/slidify/reveal tree
+   CLOSED: [2015-11-17 Tue 02:05]
+   :LOGBOOK:
+   CLOCK: [2015-11-16 Mon 23:25]--[2015-11-17 Tue 01:05] =>  1:40
+   CLOCK: [2015-11-16 Mon 22:52]--[2015-11-16 Mon 23:17] =>  0:25
+   :END:
+
+Mostly decent. Definitely not easy to do all three in one. Probably best to split them up
+into separate files as the beamer options don't seem to play well with reveal/slidify,
+particularly columns.
+
+[[http://stackoverflow.com/questions/15625990/how-to-set-size-for-local-image-using-knitr-for-markdown][This]] was helpful for images in slidify. Since markdown doesn't work so hot with image
+sizes, the suggestion was to use the =png= and =grid= packages to simply "plot" the image
+so that plot size options could be passed... like so:
+
+#+begin_example
+
+```{r fig.width=1, fig.height=10,echo=FALSE}
+
+library(png)
+library(grid)
+img <- readPNG(path/to/your/image)
+grid.raster(img)
+
+```
+#+end_example
+
+* setup								   :noexport:
+
+#+begin_src R :session r :exports none :results silent :eval yes 
+library(ggplot2)
+library(reshape2)
+library(plyr)
+library(ascii)
+
+#+end_src
+
+
+
+
+* time								   :noexport:
+
+#+BEGIN: clocktable :maxlevel 2 :scope file
+#+CAPTION: Clock summary at [2015-11-06 Fri 08:37]
+| Headline                   | Time   |      |
+|----------------------------+--------+------|
+| *Total time*               | *0:38* |      |
+|----------------------------+--------+------|
+| todos                      | 0:38   |      |
+| \_  todo decide on content |        | 0:38 |
+#+END:
+* 
+  
+#+begin_center
+#+attr_latex: :width \textwidth
+#+attr_html: :width 100%
+[[./img/org-mode.png]]
+#+end_center
+
+* the life of a product developer
+
+Stuff I do in the course of my work (probably not that different from you!):
+
+** direct						      :B_block:BMCOL:
+   :PROPERTIES:
+   :BEAMER_col: 0.5
+   :BEAMER_env: block
+   :END:
+
+- write up experimental plans
+- do experiments
+- collect/analyze data
+- writeup reports/presentations
+- meet with tech experts
+
+#+reveal: split
+
+** indirect						      :B_block:BMCOL:
+   :PROPERTIES:
+   :BEAMER_col: 0.5
+   :BEAMER_env: block
+   :END:
+
+
+- record all sorts info
+- meeting notes
+- todos
+- store contact info/notes
+- what to work on and when
+
+* but what the hell does emacs have to do with it?
+
+Believe it or not, I /learned Emacs/ for =org-mode=. To date, it's the /only/ solution I'm
+aware of that allows for all of the following in one place:
+- notes
+- todos/time stamping/deadlines
+- tags
+- embedded code + execution
+- export to multiple formats, with images, links, table of contents, automatically
+  generated code blocks and/or results...
+
+\pause
+
+/Pretty cool!/
+
+* some competition
+I've always been a note taker as I like to refer to the past... you never know what
+might be useful in the future! I tried all sorts of programs:
+
+** recording work 					      :B_block:BMCOL:
+   :PROPERTIES:
+   :BEAMER_env: block
+   :BEAMER_col: 0.5
+   :END:
+  - Word/Writer
+  - [[http://zim-wiki.org/][zim]] (personal wiki)
+  - [[https://evernote.com/][Evernote]]
+  - [[http://tiddlywiki.com/][TiddlyWiki]]
+  - [[https://www.rstudio.com/][RStudio]]?
+
+
+** todos 						      :B_block:BMCOL:
+   :PROPERTIES:
+   :BEAMER_env: block
+   :BEAMER_col: 0.5
+   :END:
+
+- [[http://todotxt.com/][=todo.txt=]]
+- [[https://en.wikipedia.org/wiki/Chandler_(software)][Chandler]]
+- [[https://itunes.apple.com/us/app/igtd/id488595283?mt=8][iGTD]]
+- [[http://tiddlywiki.com/][TiddlyWiki]]
+
+* ok, so what is it?
+
+=Org-mode= is a major mode for the Emacs text editor.
+- it uses markup to allow for structuring
+
+#+begin_example
+
+,* ok, so what is it?                          # heading
+
+=Org-mode= is a major mode for the Emacs text editor.
+- it uses markup to allow for structuring     # unordered list
+
+#+end_example
+

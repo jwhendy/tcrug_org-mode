@@ -1,0 +1,12 @@
+#+latex_class: beamer
+#+options: toc:nil latex:t tex:t H:1
+#+latex_class_options: [aspectratio=169,presentation,bigger,fleqn]
+#+latex_header: \usepackage{setspace}
+#+latex_header: \setstretch{1.3}
+#+latex_header: \usepackage{booktabs}
+#+latex_header: \hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+#+latex_header: \usepackage{lmodern}
+#+latex_header: \usetheme[alternativetitlepage=true,titleline=true]{Torino}
+#+latex_header: \usecolortheme{freewilly}
+
+#+AUTHOR:    John Henderson
