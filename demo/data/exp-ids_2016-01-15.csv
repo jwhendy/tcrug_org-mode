@@ -1,0 +1,6 @@
+base,rep,file,first,last,order,notes
+samp_1,1,samp1_01_2016-01-15.csv,90,225,1,
+samp_1,2,samp1_02_2016-01-15.csv,48,180,5,something changed; ran second rep last
+samp_2,1,samp2_01_2016-01-15.csv,65,200,2,
+samp_3,1,samp3_01_2016-01-15.csv,40,165,3,
+samp_4,1,samp4_01_2016-01-15.csv,40,175,4,

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>R + Org-mode = awesome!</title>
+<meta name="author" content="(John Henderson)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="file:///home/jwhendy/installed/reveal.js/css/reveal.css"/>
+<link rel="stylesheet" href="file:///home/jwhendy/installed/reveal.js/css/theme/solarized.css" id="theme"/>
+<link rel="stylesheet" href="zenburn.css"/>
+<link rel="stylesheet" href="file:///home/jwhendy/installed/reveal.js/lib/css/zenburn.css"/>
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'file:///home/jwhendy/installed/reveal.js/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1>R + Org-mode = awesome!</h1>
+<h2>John Henderson</h2>
+<h2><a href="mailto:jw.hendy@gmail.com">jw.hendy@gmail.com</a></h2>
+<h2>2016 February (TCRUG meetup)</h2>
+</section>
+<style type="text/css">
+.reveal .slides { text-align: left; }
+.reveal .slides .section>* { margin-left: 0; margin-right: 0; }
+</style>
+
+
+<section>
+<section id="slide-orgheadline1">
+<h2 id="orgheadline1">Pre-warning</h2>
+<p>
+This presentation was <i>a lot</i> harder than I thought it would be!
+</p>
+<ul>
+<li>Org-mode is great, but perhaps intimidating (emacs, setup&#x2026;)</li>
+<li>Emacs itself can be quite a barrier to entry</li>
+<li>Background knowledge needed for feature <code>x</code> to make sense</li>
+<li>There's a gazillion features I would love to talk about but can't</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline2">
+<h2 id="orgheadline2">My approach</h2>
+<ul>
+<li>Overview of some features</li>
+<li>Demo of an Org file</li>
+<li>Export with a few backends</li>
+
+</ul>
+
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline5">
+<h2 id="orgheadline5">The life of a product developer</h2>
+<p>
+Stuff I do in the course of my work (probably not that different from you!):
+</p>
+
+</section>
+<section id="slide-orgheadline3">
+<h3 id="orgheadline3">Direct                                                                    :</h3>
+<ul>
+<li>write up experimental plans</li>
+<li>do experiments</li>
+<li>collect/analyze data</li>
+<li>writeup reports/presentations</li>
+<li>share/collaborate with others</li>
+
+</ul>
+
+</section>
+<section id="slide-orgheadline4">
+<h3 id="orgheadline4">Indirect</h3>
+<ul>
+<li>record all sorts of info</li>
+<li>meeting notes</li>
+<li>manage todos</li>
+<li>store contact info/notes</li>
+<li>what to work on and when</li>
+<li>emails</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline6">
+<h2 id="orgheadline6">What the hell does emacs have to do with it?</h2>
+<p>
+Believe it or not, I <i>learned Emacs</i> for <code>org-mode</code>. To date, it's the <i>only</i> solution I'm
+aware of that allows for all of the following in one place:
+</p>
+<ul>
+<li>notes</li>
+<li>todos/time stamping/deadlines</li>
+<li>tags/properties</li>
+<li>embedded code + execution</li>
+<li>export to multiple formats, with images, links, table of contents, automatically
+generated code blocks and/or results&#x2026;</li>
+
+</ul>
+
+<p>
+\pause
+</p>
+
+<p>
+<i>Pretty cool!</i>
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline9">
+<h2 id="orgheadline9">Some competition</h2>
+<p>
+I've always been a note taker, as I like to refer to the past&#x2026; you never know what
+might be useful in the future! I tried all sorts of programs:
+</p>
+
+</section>
+<section id="slide-orgheadline7">
+<h3 id="orgheadline7">recording work&#xa0;&#xa0;&#xa0;<span class="tag"><span class="B_block">B_block</span>&#xa0;<span class="BMCOL">BMCOL</span></span></h3>
+<ul>
+<li>Word/Writer</li>
+<li><a href="http://zim-wiki.org/">zim</a> (personal wiki)</li>
+<li><a href="https://evernote.com/">Evernote</a></li>
+<li><a href="http://tiddlywiki.com/">TiddlyWiki</a></li>
+<li><a href="https://www.rstudio.com/">RStudio</a>?</li>
+
+</ul>
+
+
+</section>
+<section id="slide-orgheadline8">
+<h3 id="orgheadline8">Todos&#xa0;&#xa0;&#xa0;<span class="tag"><span class="B_block">B_block</span>&#xa0;<span class="BMCOL">BMCOL</span></span></h3>
+<ul>
+<li><a href="http://todotxt.com/"><code>todo.txt</code></a></li>
+<li><a href="https://en.wikipedia.org/wiki/Chandler_(software)">Chandler</a></li>
+<li><a href="https://itunes.apple.com/us/app/igtd/id488595283?mt=8">iGTD</a></li>
+<li><a href="http://tiddlywiki.com/">TiddlyWiki</a></li>
+<li><a href="http://www.getontracks.org/">tracks</a></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline10">
+<h2 id="orgheadline10">Ok, so what is it?</h2>
+<p>
+<code>Org-mode</code> is a major mode for the Emacs text editor.
+</p>
+<ul>
+<li>it uses markup to allow for structuring</li>
+
+</ul>
+
+<pre class="example">
+* ok, so what is it?                          # heading
+
+=Org-mode= is a major mode for the Emacs text editor.
+- it uses markup to allow for structuring     # list
+</pre>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline13">
+<h2 id="orgheadline13">Markup</h2>
+<div class="outline-text-2" id="text-orgheadline13">
+</div></section>
+<section id="slide-orgheadline12">
+<h3 id="orgheadline12">heading</h3>
+<div class="outline-text-3" id="text-orgheadline12">
+</div></section>
+<section id="slide-orgheadline11">
+<h4 id="orgheadline11">subheading</h4>
+<ul>
+<li>unordered list</li>
+
+</ul>
+
+
+<ol>
+<li>ordered list</li>
+
+</ol>
+
+
+<p>
+<b>bold</b>, <i>italic</i>, <span class="underline">underline</span>, footnote \(\footnote[frame]{Footnote goes here}\),
+superscripts<sup>x</sup> and subscripts<sub>y</sub>, <a href="https://www.google.com/">link</a>
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline14">
+<h2 id="orgheadline14">Markup</h2>
+<pre class="example">
+* heading
+** subheading
+- unordered list
+1. ordered list
+*bold*, /italic/, _underline_, footnotes[fn:1],
+superscripts^x and subscripts_y,  [[https://www.google.com][link]] 
+
+* Footnotes
+Footnote goes here [fn:1]
+</pre>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline18">
+<h2 id="orgheadline18">Todos</h2>
+<div class="outline-text-2" id="text-orgheadline18">
+</div></section>
+<section id="slide-orgheadline15">
+<h3 id="orgheadline15"><span class="todo todo">todo</span> do something</h3>
+</section>
+<section id="slide-orgheadline16">
+<h3 id="orgheadline16"><span class="todo todo">todo</span> <code>[1/2]</code> meta task&#xa0;&#xa0;&#xa0;<span class="tag"><span class="proj">proj</span></span></h3>
+<ul>
+<li class="on"><code>[X]</code> thing 1</li>
+<li class="off"><code>[&#xa0;]</code> thing 2</li>
+
+</ul>
+</section>
+<section id="slide-orgheadline17">
+<h3 id="orgheadline17"><span class="done done">done</span> another thing</h3>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline19">
+<h2 id="orgheadline19">Todos</h2>
+<pre class="example">
+** todo do something
+** todo [1/2] meta task 					       :proj:
+   - [X] thing 1
+   - [ ] thing 2
+** done another thing
+</pre>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline22">
+<h2 id="orgheadline22">Time stamps</h2>
+<p>
+Can add further information to notes (logs, deadlines, etc.)
+</p>
+
+</section>
+<section id="slide-orgheadline20">
+<h3 id="orgheadline20">Notes about meeting with Dude</h3>
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">[2016-01-18 Mon]</span></span>
+</p>
+
+<p>
+Did blah blah blah
+</p>
+
+</section>
+<section id="slide-orgheadline21">
+<h3 id="orgheadline21"><span class="todo todo">todo</span> do something</h3>
+
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline23">
+<h2 id="orgheadline23">Time stamps</h2>
+<p>
+Can add further information to notes (logs, deadlines, etc.)
+</p>
+
+<pre class="example">
+** Notes about meeting with Dude
+[2016-01-18 Mon]
+
+Did blah blah blah
+
+** todo do something
+   DEADLINE: &lt;2016-01-21 Thu&gt;
+</pre>
+
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline24">
+<h2 id="orgheadline24">Tables/spreadsheet!</h2>
+<ul>
+<li>Formulas: <code>$</code> refers to column; <code>@</code> refers to row</li>
+<li>Emacs <code>calc</code> has format specifiers built in</li>
+
+</ul>
+
+<table id="orgtable1" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">id</th>
+<th scope="col" class="org-right">x</th>
+<th scope="col" class="org-right">y</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">a</td>
+<td class="org-right">2</td>
+<td class="org-right">1.33</td>
+</tr>
+
+<tr>
+<td class="org-left">b</td>
+<td class="org-right">4</td>
+<td class="org-right">5.33</td>
+</tr>
+
+<tr>
+<td class="org-left">c</td>
+<td class="org-right">6</td>
+<td class="org-right">12.00</td>
+</tr>
+</tbody>
+</table>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline25">
+<h2 id="orgheadline25">Tables/spreadsheet!</h2>
+<pre class="example">
+#+tblname: dat_1
+| *id* | *x* | *y* |
+|------+-----+-----|
+| a    |   2 |   4 |
+| b    |   4 |  16 |
+| c    |   6 |  36 |
+#+TBLFM: $3=$2^2/3; %.2f
+</pre>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline26">
+<h2 id="orgheadline26">Inline code</h2>
+<p>
+I had <code>10</code> apples and I ate <code>4</code>. I must
+have <code>6</code> left.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline27">
+<h2 id="orgheadline27">Inline source code</h2>
+<pre class="example">
+I had src_R[:session r]{x &lt;- 10; x} apples and I
+ate src_R[:session r]{y &lt;- 4; y}. I must have
+src_R[:session r]{x - y} left.
+</pre>
+
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline28">
+<h2 id="orgheadline28">Source blocks</h2>
+<pre class="example">
+#+name: code-ex1
+#+header: data = dat_1
+#+begin_src R :session r :exports results :results output
+
+library(ggplot2)
+sum(data$y)
+
+#+end_src
+</pre>
+
+<pre class="example">
+[1] 18.66
+</pre>
+
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline29">
+<h2 id="orgheadline29">Plotting</h2>
+<div class="org-src-container">
+
+<pre id="dat1_plot"><code class="R">p <- ggplot(data, aes(x = x, y = y, colour = id))
+p + geom_point(size = 4) + theme_bw()
+</code></pre>
+</div>
+
+<div class="org-center">
+
+<div class="figure">
+<p><img src="../../plots/dat1_scatter.png" alt="dat1_scatter.png" height="500px" />
+</p>
+</div>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline30">
+<h2 id="orgheadline30">Plotting</h2>
+<pre class="example">
+#+name: dat1_plot
+#+header: :var data = dat_1 :file ../../plots/dat1_scatter.png 
+#+header: :width 1600 :height 900 :res 200
+#+begin_src R :session r :exports both :results output graphics
+
+p &lt;- ggplot(data, aes(x = x, y = y, colour = id))
+p + geom_point(size = 4) + theme_bw()
+
+#+end_src
+</pre>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline31">
+<h2 id="orgheadline31">Formatting results</h2>
+<pre class="example">
+#+begin_center
+#+attr_html: :height 600px
+#+RESULTS: dat1_plot
+[[file:../../plots/dat1_scatter.png]]
+#+end_center
+</pre>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline32">
+<h2 id="orgheadline32">Agenda</h2>
+<p>
+Like a search engine for your files
+</p>
+<ul>
+<li>Extracts todos, time stamps, tags, etc.</li>
+<li>Can apply filters (keywords + the above)</li>
+<li>Create custom views (only todo keyword <code>x</code>)</li>
+
+</ul>
+
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline33">
+<h2 id="orgheadline33"></h2>
+<div class="org-center">
+<p>
+Demo time!
+</p>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline34">
+<h2 id="orgheadline34">Some tips</h2>
+<p>
+If you find this intriguing but intimidating, start small
+</p>
+<ul>
+<li>Start journaling in Org</li>
+<li>Track todos</li>
+<li>Edit a text file in Emacs</li>
+<li>Create one document via export</li>
+<li>Only customize and learn new features as needed</li>
+
+</ul>
+
+
+<p>
+Ask for help
+</p>
+<ul>
+<li>The mailing list is awesome!</li>
+<li>SO has quite a few Org questions</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline35">
+<h2 id="orgheadline35">Extra stuff</h2>
+<ul>
+<li>Manage contacts with <a href="https://julien.danjou.info/projects/emacs-packages#org-contacts">org-contacts</a></li>
+<li>Text based file manager: <a href="http://www.emacswiki.org/emacs/Sunrise_Commander">Sunrise Commander</a></li>
+<li>A <a href="http://www.gnu.org/software/emacs/tour/">tour of Emacs</a></li>
+<li><a href="http://www.taskjuggler.org/">Taskjuggler</a>, an Org-mode compatible project planner</li>
+<li>Draw in \LaTeX with <a href="http://www.texample.net/tikz/">TikZ/pgf</a></li>
+<li>Beamer <a href="https://github.com/matze/mtheme">metropolis theme</a> (beamer that doesn't look like it)</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline36">
+<h2 id="orgheadline36">Learning Org</h2>
+<ul>
+<li>Org-mode manual: <a href="http://orgmode.org/manual/">http://orgmode.org/manual/</a></li>
+<li>Worg, the Org-mode wiki: <a href="http://orgmode.org/worg/">http://orgmode.org/worg/</a></li>
+<li>Org-mode mailing lsit: <a href="http://orgmode.org/community.html">http://orgmode.org/community.html</a></li>
+<li>Compact Org-mode guide: <a href="http://orgmode.org/guide/">http://orgmode.org/guide/</a></li>
+<li>Org-mode shortcut reference card: <a href="http://orgmode.org/orgcard.pdf">http://orgmode.org/orgcard.pdf</a></li>
+<li>Brent Hanson's personal collection of settings, tips, and tricks: <a href="http://doc.norang.ca/org-mode.html">http://doc.norang.ca/org-mode.html</a></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline37">
+<h2 id="orgheadline37">References</h2>
+<ul>
+<li>Schulte, Eric; Davison, Dan; Dye, Thomas S; Dominik, Carsten. <i>A Multi-Language Computing Environment for Literate Programming and Reproducible Research</i>. 
+Journal of Statistical Software. <a href="http://www.jstatsoft.org/article/view/v046i03">http://www.jstatsoft.org/article/view/v046i03</a></li>
+
+<li>Dye, Thomas S. <i>Structure and Growth of the Leeward Kohala Field System: An
+Analysis with Directed Graphs</i>. PlosONE. <a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0102431">http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0102431</a></li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgheadline38">
+<h2 id="orgheadline38">Examples</h2>
+<ul>
+<li><a href="https://github.com/jwhendy/devFest-shiny_2015">2015 Google Developer Fest presentation</a></li>
+<li><a href="https://github.com/jwhendy/devFest-geo">2014 Google Developer Fest presentation</a></li>
+<li><a href="https://drive.google.com/open?id=0BzQupOSnvw08anh6c3FwaGlHWVk">Hobby analysis of a multi-level marketing company</a></li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="file:///home/jwhendy/installed/reveal.js/lib/js/head.min.js"></script>
+<script src="file:///home/jwhendy/installed/reveal.js/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'file:///home/jwhendy/installed/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }]
+});
+</script>
+</body>
+</html>

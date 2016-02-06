@@ -1,0 +1,97 @@
+<div class="MD">
+&#x2014;
+title       : Org-mode + R = awesome!
+subtitle    : 
+author      : John Henderson
+job         : 
+framework   : io2012        # {io2012, html5slides, shower, dzslides, &#x2026;}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+&#x2014;
+
+</div>
+
+# Pre-warning
+
+This presentation was *a lot* harder than I thought it would be!
+
+-   Org-mode is great, but perhaps intimidating (emacs, setup&#x2026;)
+-   Emacs itself can be quite a barrier to entry
+-   Background knowledge needed for feature `x` to make sense
+-   There's a gazillion features I would love to talk about but can't
+
+---
+
+# My approach
+
+-   Overview of some features
+-   Demo of an Org file
+-   Export with a few backends
+
+---
+
+# The life of a product developer
+
+Stuff I do in the course of my work (probably not that different from you!):
+
+## Direct     :B_block:BMCOL:
+
+-   write up experimental plans
+-   do experiments
+-   collect/analyze data
+-   writeup reports/presentations
+-   share/collaborate with others
+
+## Indirect     :B_block:BMCOL:
+
+-   record all sorts of info
+-   meeting notes
+-   manage todos
+-   store contact info/notes
+-   what to work on and when
+-   emails
+
+---
+
+# What the hell does emacs have to do with it?
+
+Believe it or not, I *learned Emacs* for `org-mode`. To date, it's the *only* solution I'm
+aware of that allows for all of the following in one place:
+
+-   notes
+-   todos/time stamping/deadlines
+-   tags/properties
+-   embedded code + execution
+-   export to multiple formats, with images, links, table of contents, automatically
+    generated code blocks and/or results&#x2026;
+
+\pause
+
+*Pretty cool!*
+
+---
+
+# Some competition
+
+I've always been a note taker, as I like to refer to the past&#x2026; you never know what
+might be useful in the future! I tried all sorts of programs:
+
+## recording work     :B_block:BMCOL:
+
+-   Word/Writer
+-   [zim](http://zim-wiki.org/) (personal wiki)
+-   [Evernote](https://evernote.com/)
+-   [TiddlyWiki](http://tiddlywiki.com/)
+-   [RStudio](https://www.rstudio.com/)?
+
+## Todos     :B_block:BMCOL:
+
+-   [`todo.txt`](http://todotxt.com/)
+-   [Chandler](https://en.wikipedia.org/wiki/Chandler_(software))
+-   [iGTD](https://itunes.apple.com/us/app/igtd/id488595283?mt=8)
+-   [TiddlyWiki](http://tiddlywiki.com/)
+-   [tracks](http://www.getontracks.org/)
+
+---

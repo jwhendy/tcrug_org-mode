@@ -1,13 +1,12 @@
-(cd "~/vault/personal/presentations/tcrug_org-mode/")
-
 ;; adding the directories we created above to the path
-(add-to-list 'load-path "./libs/org-mode/lisp/")
-(add-to-list 'load-path "./libs/org-mode/contrib/lisp")
-(add-to-list 'load-path "./libs/ESS/lisp/")
-(add-to-list 'load-path "./libs/org-reveal/")
-(add-to-list 'load-path "./libs/orgmode-accessories/")
-(add-to-list 'load-path "./libs/org-present/")
-(add-to-list 'load-path "./libs/")
+(add-to-list 'load-path "../libs/org-mode/lisp/")
+(add-to-list 'load-path "../libs/org-mode/contrib/lisp")
+(add-to-list 'load-path "../libs/ESS/lisp/")
+(add-to-list 'load-path "../libs/org-reveal/")
+(add-to-list 'load-path "../libs/orgmode-accessories/")
+(add-to-list 'load-path "../libs/org-present/")
+(add-to-list 'load-path "../libs/ESS/")
+(add-to-list 'load-path "../libs/")
 
 ;; these libraries are all related to exporting
 (require 'ox-latex)
@@ -61,7 +60,7 @@
                ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
                ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
 
-;; tell reveal where the library lives
+;; tell reveal where you're library lives
 (setq org-reveal-root "file:///../libs/reveal.js")
 
 ;; sets Org-mode shortcuts that are commonly used
@@ -114,11 +113,11 @@
 
 ;; here's a common capture template I use
 (setq org-capture-templates
-  '(("l" "log" entry (file+headline "~/vault/personal/presentations/tcrug_org-mode/demo/org-demo_capture.org" "Log")
+  '(("l" "log" entry (file+headline "~/org/capture.org" "Log")
          "* %? \n%u " :clock-in t :clock-resume t)
-    ("t" "task" entry (file+headline "~/vault/personal/presentations/tcrug_org-mode/demo/org-demo_article.org" "todos")
+    ("t" "task" entry (file+headline "~/org/projects.org" "Tasks")
          "* todo %? %^g\n%u" :prepend t)
-    ("c" "clock" entry (file+datetree "~/vault/personal/presentations/tcrug_org-mode/demo/org-demo_clocking.org")
+    ("c" "clock" entry (file+datetree "~/org/clocking.org")
          "* %?\n%u" :clock-in t :clock-keep t)))
 
 ;; I like unique IDs; this creates them automatically if none exists
@@ -137,6 +136,3 @@
 
 ;; if you'd like to present with org-mode
 (require 'org-present)
-
-;; set agenda files
-(setq org-agenda-files '("./demo"))

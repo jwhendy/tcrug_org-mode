@@ -1,7 +1,7 @@
-#+options: toc:nil latex:t tex:t H:1 tags:nil reveal_center:nil num:nil
+#+options: toc:nil latex:t tex:t H:1 tags:t reveal_center:nil num:nil todo:t tasks:t e:t <:t
 #+latex_class: beamer
 #+latex_class_options: [aspectratio=169,presentation,bigger,fleqn,t]
-#+latex_header: \usetheme[frametitleformat=lowercase,numbering=none]{m}
+#+latex_header: \usetheme[titleformat=regular,numbering=none]{metropolis}
 #+latex_header: \setbeamerfont{frametitle}{shape=\upshape}
 #+latex_header: \usepackage{FiraSans} 
 #+latex_header: \usepackage{setspace} 

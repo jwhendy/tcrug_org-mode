@@ -1,0 +1,736 @@
+#+setupfile: "../setup/setupfile.org"
+#+title: R + Org-mode = awesome!
+#+subtitle: Org-mode for science, reproducible research, organization
+#+date: 2016 January (TCRUG meetup)
+#+author: John Henderson
+#+email: jw.hendy@gmail.com
+#+select_tags: article
+#+options: inline:nil prop:t
+#+PROPERTY: header-args:elisp :tangle ./setup/example-config
+
+
+* todos 							   :noexport:
+** done create content
+   CLOSED: [2016-01-21 Thu 17:18]
+   :LOGBOOK:
+   CLOCK: [2016-01-20 Wed 22:38]--[2016-01-20 Wed 22:59] =>  0:21
+   CLOCK: [2016-01-20 Wed 21:16]--[2016-01-20 Wed 22:38] =>  1:22
+   :END:
+
+possible topics
+- [X] super core keyboard shortcuts
+- [X] managing todos/actions
+- [X] using org for notes/documenting work
+- [X] analysis demo
+  - [X] directory structure
+  - [X] iteratively going between R buffer and code blocks
+  - [X] editing code blocks
+  - [X] reusing chunks/code output in other documents
+  - [X] typical flow of analysis/document generation
+  - [X] ascii package
+  - [X] exports/power of latex, multiple formats
+- [X] helpful text-based file manager
+- [X] some of the power of emacs (navigation, rectangles, regexp)
+- [X] capture
+- [X] clocking
+
+** done setup directories (./data, ./plots)
+   CLOSED: [2016-01-21 Thu 17:18]
+** done migrate/anonymize example data set 
+   CLOSED: [2016-01-21 Thu 17:18]
+   :LOGBOOK:
+   CLOCK: [2016-01-16 Sat 11:26]--[2016-01-16 Sat 11:50] =>  0:24
+   :END:
+ [2015-11-05 Thu]
+** todo look into pdf/html separate export options 
+ [2015-11-05 Thu]
+
+I've seen hooks or something where you can generate, for example, a =.png= when using the
+html export engine vs. =.pdf= for LaTeX.
+
+** todo get beamer/slidify/reveal working
+   CLOSED: [2015-11-17 Tue 02:05]
+   :LOGBOOK:
+   CLOCK: [2016-01-21 Thu 17:24]--[2016-01-21 Thu 17:26] =>  0:02
+   CLOCK: [2015-11-16 Mon 23:25]--[2015-11-17 Tue 00:05] =>  0:40
+   CLOCK: [2015-11-16 Mon 22:52]--[2015-11-16 Mon 23:17] =>  0:25
+   :END:
+
+Mostly decent. Definitely not easy to do all three in one. Probably best to split them up
+into separate files as the beamer options don't seem to play well with reveal/slidify,
+particularly columns.
+
+[[http://stackoverflow.com/questions/15625990/how-to-set-size-for-local-image-using-knitr-for-markdown][This]] was helpful for images in slidify. Since markdown doesn't work so hot with image
+sizes, the suggestion was to use the =png= and =grid= packages to simply "plot" the image
+so that plot size options could be passed... like so:
+
+#+begin_example
+
+```{r fig.width=1, fig.height=10,echo=FALSE}
+
+library(png)
+library(grid)
+img <- readPNG(path/to/your/image)
+grid.raster(img)
+
+```
+#+end_example
+
+** done add deps to readme
+   CLOSED: [2016-02-03 Wed 21:15]
+
+- sunrise.el
+- ess (http://ess.r-project.org/index.php?Section=download)
+- org-reveal (https://github.com/yjwen/org-reveal)
+- org-ravel (https://github.com/chasberry/orgmode-accessories)
+- others?
+** todo verify local setup file/libraries
+   :LOGBOOK:
+   CLOCK: [2016-02-01 Mon 16:11]--[2016-02-01 Mon 17:11] =>  1:00
+   :END:
+
+** todo mostly final checkover
+   :LOGBOOK:
+   CLOCK: [2016-02-03 Wed 21:36]--[2016-02-03 Wed 21:43] =>  0:07
+   CLOCK: [2016-02-03 Wed 21:16]--[2016-02-03 Wed 21:36] =>  0:20
+   :END:
+
+* Background
+
+I work in product development at 3M. I'd /like/ to say my job consists
+of coming up with ideas, trying things out, collecting and analyzing
+data, using that knowledge for the next iteration, and eventually launching a finished
+product. Those steps are certainly involved, but my life /also/ involves a hefty dose of
+meetings, emails and phone calls, keeping track of various bits of information, compliance
+courses, lots of todos/deadlines, volunteering activities, and other general miscellany.
+
+It might not seem like a big deal, but as I tried various applications, I simply found
+that I disliked storing notes, todos, contacts, data, code, etc. in separate formats and
+locations. To date, I'm unaware of another solution that lets you do what Org-mode can do, which is
+what I'd like to introduce here!
+ - General notes/information organization
+ - Todos and planning (scheuling/deadlines/states)
+ - Export to html, pdf (LaTeX/Beamer), markdown, open document formats, and more
+ - Numerous supported programming languages (R, python, bash, gnuplot, among others)
+ - Citations/references
+ - Inserting code results (both blocks and inline code)
+ - Inserting images into exported documents
+ - Even using code to print out Org-mode syntax, thus allowing programmatically generated
+   document structures (say a headline per some repeated systematic analysis)
+
+ These features extremely well for those working in technical/scientific fields, as well as
+ enabling literate programming and reproducible research. Just so it's clear, I'm certainly
+ not the first to discover or present this. There's an excellent article about Org-mode for
+ reproducible research written by various Org-mode contributors, as well as an
+ example of such work by Thomas Dye.[fn:9] [fn:8]
+
+* This document
+
+I wrote this to serve as a quick demo of Org-mode features for a live demonstration at the
+[[http://www.meetup.com/twincitiesrug/][Twin Cities R User Group]] (TCRUG). I re-created a minimal version of my =~/.emacs= config
+file in an effort to make it easier for newer users to dive in. From there, I simply
+created some quick examples and notes on some of the various Org-mode features. This file
+is meant to serve as a living Org-mode tutorial. You can see the code, options, and
+markup that relate to each feature and actually try them out. And don't worry, there's a
+backup version, =demo-backup.org=, so feel free to play around! 
+
+* Installation and setup					   :noexport:
+
+You'll need to download and/or install all of the following for the entirety of this
+document to work. If it's not obvious, you'll definitely be needing [[https://www.gnu.org/software/emacs/#Obtaining][Emacs installed]]... For
+data analysis/code demonstrations, I'll be using [[https://cran.rstudio.com/][=R=]]. Lastly, to export to \LaTeX for
+documents and Beamer presentation, you'll need a distribution like [[https://www.tug.org/texlive/][TexLive]] or [[http://miktex.org/][MiKTeX]]. I
+could try and list all of the required packages, but it will honestly be easier to export
+to \LaTeX and view the =*Org PDF LaTeX Ouput*= buffer, and look at the errors in
+order to identify what to install (with e.g. =tlmgr install package_name= for TexLive).
+
+From there, grab all of these and put them somewehere (I use =~/.elisp/site-lisp/=). To
+reproduce this document, I'd use the =./libs= folder for simplicity. The block below grabs all
+of the requried libraries.
+
+#+begin_src sh :exports results :results silent :eval no
+
+# If you'd like, uncomment the next line and change the directory to point
+# somewhere (existing or newly created) these all can live.
+# DIR="/change/to/this/git/repo/libs/"
+
+cd $DIR
+
+# now we clone some repositories and download sunrise
+# ESS and orgmode require a `make` after downloading
+# orgmode-accessories/ox-ravel.org has code to execute to generate ox-ravel.el
+git clone git://orgmode.org/org-mode.git &&
+git clone https://github.com/emacs-ess/ESS.git &&
+git clone https://github.com/hakimel/reveal.js.git &&
+git clone https://github.com/chasberry/orgmode-accessories.git &&
+git clone https://github.com/yjwen/org-reveal.git &&
+git clone https://github.com/rlister/org-present &&
+wget http://www.emacswiki.org/emacs/download/sunrise-commander.el
+#+end_src
+
+To use these libraries, we need to both tell Emacs about the directories and load the
+packages. Since we're at it, I'm loading all of the desired libraries here, as well as
+telling Org-mode about the languages we might use for code in the document.
+
+You can run =M-x org-babel-tangle= and the file =../setup/example-config= will be
+generated from the block below. Once that file exists, you can start Emacs from the
+command line like this:
+- go to the top level of this git repo (=~/path/to/tcrug_org-mode=)
+- start emacs with =emacs -Q= (don't load a config)
+- do =M-x load-file RET /path/to/tcrug_org-mode/setup/example-config RET=. 
+
+#+begin_src elisp :tangle ../setup/example-config
+
+;; adding the directories we created above to the path
+(add-to-list 'load-path "./libs/org-mode/lisp/")
+(add-to-list 'load-path "./libs/org-mode/contrib/lisp")
+(add-to-list 'load-path "./libs/ESS/lisp/")
+(add-to-list 'load-path "./libs/org-reveal/")
+(add-to-list 'load-path "./libs/orgmode-accessories/")
+(add-to-list 'load-path "./libs/org-present/")
+(add-to-list 'load-path "./libs/")
+
+;; these libraries are all related to exporting
+(require 'ox-latex)
+(require 'ox-html)
+(require 'ox-beamer)
+(require 'ox-md)
+(require 'ox-odt)
+(require 'ox-reveal)
+(require 'ox-ravel)
+
+;; ESS is needed for R code execution
+(require 'ess-site)
+
+;; we'll use sunrise-commmander for a text-based file manager
+(require 'sunrise-commander)
+
+;; these enable some cool Org-mode features turned off by default
+(require 'org-inlinetask)
+(require 'org-id)
+(require 'org-clock)
+
+;; this is required for any languages you plan to use
+;; the full list of supported languages is here:
+;; - http://orgmode.org/worg/org-contrib/babel/languages.html
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((latex . t)
+   (emacs-lisp . t)
+   (org . t)
+   (R . t)
+   (shell . t)
+   (python . t)))
+
+;; you may need this if your system defaults to python3 (like Arch)
+(setq org-babel-python-command "python2")
+
+;; I don't like the default look of emacs...
+;; this makes a bigger window, font, sets window placement,
+;; and turns off the graphical tool bar
+(set-face-attribute 'default nil :height 105)
+(setq initial-frame-alist
+     '((left . 0) (top . 20)
+       (width . 120) (height . 57)))
+(tool-bar-mode 0)
+
+;; you need this for beamer export
+(add-to-list 'org-latex-classes
+             '("beamer"
+               "\\documentclass\[presentation\]\{beamer\}"
+               ("\\section\{%s\}" . "\\section*\{%s\}")
+               ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
+               ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
+
+;; tell reveal where the library lives
+(setq org-reveal-root "file:///../libs/reveal.js")
+
+;; sets Org-mode shortcuts that are commonly used
+;; you need the clipboard ones to transfer copied/pasted
+;; text between Emacs and your desktop environment
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cr" 'org-resolve-clocks)
+(global-set-key "\C-ce" 'org-set-effort)
+(global-set-key "\C-w" 'clipboard-kill-region)
+(global-set-key "\M-w" 'clipboard-kill-ring-save)
+(global-set-key "\C-y" 'clipboard-yank)
+(global-set-key "\C-cc" 'org-capture)
+
+;; hide multiple stars (looks more like an outline)
+;; use absolute paths for file links (more robust)
+(setq org-hide-leading-stars t)
+(setq org-link-file-path-type (quote absolute))
+
+;; I don't like capitals; this defines my own
+;; todo states with lower case and in the order I want
+(setq org-todo-keywords '((sequence 
+      "todo(t)" "next(n)" "wait(w@)" "|" 
+      "done(d)" "cancelled(c@/@)")))
+
+;; this section has to do with appearance related tweaks
+;; - booktabs for prettier latex tables
+;; - don't fiddle with whitespace when exporting
+;; - don't use xEn notation for big numbers in tables
+;; - fill to 90 characters instead of 80 and turn on auto-fill
+(setq org-latex-tables-booktabs t)
+(setq org-src-preserve-indentation t)
+(setq org-latex-table-scientific-notation nil)
+(setq-default fill-column 90)
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+
+;; related to storing clock data (time on tasks)
+;; and general meta data in headline drawers
+(setq org-clock-into-drawer t)
+(setq org-clock-out-remove-zero-time-clocks t)
+(setq org-clock-out-when-done t)
+(setq org-log-into-drawer t)
+(setq org-log-done (quote time))
+
+;; when refiling, this defines where Org-mode will look
+;; for target files/headlines
+(setq org-refile-targets (quote ((nil :maxlevel . 3)
+                                 (org-agenda-files :maxlevel . 3))))
+(setq org-refile-use-outline-path (quote file))
+
+;; here's a common capture template I use
+(setq org-capture-templates
+  '(("l" "log" entry (file+headline "~/vault/personal/presentations/tcrug_org-mode/demo/org-demo_capture.org" "Log")
+         "* %? \n%u " :clock-in t :clock-resume t)
+    ("t" "task" entry (file+headline "~/vault/personal/presentations/tcrug_org-mode/demo/org-demo_article.org" "Tasks")
+         "* todo %? %^g\n%u" :prepend t)
+    ("c" "clock" entry (file+datetree "~/vault/personal/presentations/tcrug_org-mode/demo/org-demo_clocking.org")
+         "* %?\n%u" :clock-in t :clock-keep t)))
+
+;; I like unique IDs; this creates them automatically if none exists
+;; and you store a link to a headline (more robust than file/path based)
+(setq org-link-to-org-use-id 'create-if-interactive)
+
+;; things related to sunrise-commander
+(setq dired-omit-files "^\\...+$")
+(setq sr-history-length 20)
+(setq sr-listing-switches "-al")
+(setq sr-show-file-attributes nil)
+
+;; use chromium instead of firefox for link opening
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "chromium")
+
+;; if you'd like to present with org-mode
+(require 'org-present)
+
+;; set agenda files
+(setq org-agenda-files '("./demo"))
+#+end_src
+
+* Basic features I use
+
+Shortcuts are defined in Emacs like this: =C-x= (Ctrl+x) and =M-x= (alt+x). They can be
+strung together and interspersed with other text like this: =M-x org-mode RET= would mean
+"press alt+x, type 'org-mode' and press the enter key."
+
+The short list of /super/ basic emacs shortcuts you might be lost without:
+- =C-x C-f=: open a file
+- =C-x C-s=: save file
+- =C-g=: when there's a message in that little line way at the bottom (called the
+  minibuffer) and you can't make it shut up/stop/go away
+- =C-x u=: undo
+
+Headings are defined by one or more asterisks at the start of a line in Org-mode:
+** Sub-heading 1
+** Sub-heading 2
+** Sub-heading 3
+
+lists
+- item 1
+- item 2
+- item 3
+
+You can move headings/items up and down with =M-up/down=; you can promote/demote with
+=M-left/right=. =Alt-RET= starts a new heading/list of the same type you're cursor is
+currently on. =Ctrl-RET= starts a new heading at the same level of the one you're in.
+
+You can insert todos using a heading and any defined keyword (in this case, =next=, =todo=,
+=wait=, =cancelled=, and =done=):
+
+** todo something
+** wait waiting on info from someone
+** cancelled didn't work out
+** done good to check that off
+
+=shift-left/right= will cycle through the order of the defined todo states. =C-s= and
+=C-d= add scheduled or deadline dates (when you plan/need to do the work).
+
+You can also use checkboxes with items, including tracking totals via a higher up
+headline:
+
+** todo [2/4] a bunch of things
+- [ ] checkbox item 1
+- [X] checkbox item 2
+- [ ] checkbox item 3
+- [X] checkbox item 4
+
+Inline headings are like "notes to self" in Org-mode. They can plop right in the middle of
+text you're typing and don't show up in any exports. Agenda mode will still extract them,
+so I find it helpful for inserting action items during meetings since I can always find
+them. I also like this, as the todo stays more proximate to the context in which it
+occurred.
+
+*************** todo be sure to show inline todos
+
+Here's some text within an inline heading. Since most of the todos are your mind now are
+fresh, you remember who asked you do it or why you're doing it. Down the road, I often
+forget and it's nice to see this in the middle of the meeting notes it occured in, along
+with any notes I typed about it.
+
+*************** END
+
+Dates are often helpful, and I use time stamps quite frequently. They're a quick way to
+insert an update to notes or an action item. Since my work is often spread over days or
+longer, it's also nice from a reference point of view to see the flow of the progress on
+something.
+
+[2016-01-20 Wed]
+I tend to use the above with =C-!=; it inserts an inactive time stamp, meaning there's no
+action necessarily associated with it. It's just sitting there as a reference for when I
+wrote this. =Shift-up/down= adjusts whichever entity you're on (year, month, day) and
+=Shift-left/right= cycles by day no matter where the cursor is.
+
+To make finding things easier, you can add tags to Org-mode headings. These help with
+targeted exports, searching, and in agenda.
+
+** project 1							     :proj_1:
+*** todo task 1
+    DEADLINE: <2016-01-20 Wed>
+*** todo task 2
+    SCHEDULED: <2016-01-21 Thu>
+
+** project 2							     :proj_2:
+*** todo task 1
+    DEADLINE: <2016-01-20 Wed>
+*** todo task 2
+    SCHEDULED: <2016-01-21 Thu> DEADLINE: <2016-01-21 Thu>
+
+* Agenda
+
+The easiest way to use agenda to start is on this file. Go before the first headline and
+do =C-u M-x org-agenda-set-restriction-lock=.[fn:1] This will set agenda mode to only look at
+this file. After that, run it with =C-c a=.
+
+You can choose from the various options which bring up default views (like filters). You
+can also write your own to show, for example, a dashboard of only today's action items.
+
+The =m= option is quite handy for matching defined tags or dates (if you know what you're
+looking for). I use =C-a s= (search) far more. It brings up a list of hits for a keyword
+for each instance in your agenda files.
+
+* Some extra stuff
+
+Sometimes I get test data from a lab assistant who uses various file naming schemes. I've
+come to love [[http://www.emacswiki.org/emacs/Sunrise_Commander][Sunrise Commander]] to edit these quickly in Emacs with things like =regex= and
+rectangle operations.
+
+Speaking of rectangles, these can be really handy in tables and whatnot.
+
+| *Mfg*    | *Type* | *Grade* | *Yield %* |
+|----------+--------+---------+-----------|
+| Dow      | PP     | A       |         5 |
+| Dow      | PE     | B       |         7 |
+| Dow      | PE     | C       |         7 |
+| Lyondell | LDPE   | 1       |        13 |
+| Lyondell | LDPE   | 2       |        14 |
+| Lyondell | LDPE   | 3       |        16 |
+
+
+Org-mode also has a neat interface for entering things quickly called =capture=. I have it
+bound to =C-c c=, which brings up some options for what I want to capture. It's really
+nice for quickly entering a bunch of todos, which are filed into a location of your
+choosing.
+
+You can track your time with clocking by going to a headline and doing =C-c C-x i/o= to
+clock in/out. You can insert a clock table with =M-x org-clock-report=. Update it with
+=C-c C-c=.
+
+#+BEGIN: clocktable :maxlevel 2 :scope file
+#+CAPTION: Clock summary at [2016-01-21 Thu 18:01]
+| Headline                                    | Time   |      |
+|---------------------------------------------+--------+------|
+| *Total time*                                | *3:14* |      |
+|---------------------------------------------+--------+------|
+| todos                                       | 3:14   |      |
+| \_  done create content                     |        | 1:43 |
+| \_  done migrate/anonymize example data set |        | 0:24 |
+| \_  todo get beamer/slidify/reveal working  |        | 1:07 |
+#+END:
+
+If you're a gantt chart person, I'd suggest looking at [[http://www.taskjuggler.org/][taskjuggler]], a ruby-based project
+management application (time lines, resources, estimates). Org-mode has an export backend
+for it.
+
+Every now and then, I draw some diagrams with [[http://www.texample.net/tikz/examples/][TikZ]]. It's a bit verbose, but you can do
+some really neat things with it. Here's an example for drawing how multi-angle color quantifying cameras work:
+
+#+begin_src latex :exports both
+
+\begin{tikzpicture}[scale = 1.5]
+
+\draw[ultra thick] (0, 0) node[above, anchor = south west] {surface} -- (8, 0) ;
+\draw[dashed, ultra thick, ->, blue] (1, 3) -- (4, 0)
+   node[black, near start, above, sloped] {light path} -- (7, 3);
+
+\draw[thick] (0:4) -- node[above, near end, above, sloped] {\(15^o\)} +(60:3);
+\draw[thick] (4, 0) -- node[above, midway, above, sloped] {\(25^o\)} +(70:3);
+\draw[thick] (4, 0) -- node[above, midway, above, sloped] {\(45^o\)} +(90:3);
+\draw[thick] (4, 0) -- node[above, midway, above, sloped] {\(75^o\)} +(120:3);
+\draw[thick] (4, 0) -- node[above, midway, above, sloped] {\(110^o\)} +(155:3);
+\draw[thick] (4, 0) -- node[above, midway, above, sloped] {\(-15^o\)} +(30:3);
+
+\end{tikzpicture}
+
+#+end_src
+
+#+begin_center
+#+RESULTS:
+#+BEGIN_EXPORT latex
+[[file:./img/color.png]]
+#+END_EXPORT
+#+end_center
+
+I don't use it to full force, but there's a [[https://julien.danjou.info/projects/emacs-packages#org-contacts][contributed Org-mode package]] for managing
+contacts. It stores details in a property drawer (added with =C-c C-x p=) like this:
+
+** Henderson, John
+   :PROPERTIES:
+   :Email:    jw.hendy@gmail.com
+   :Company:  3M
+   :END:
+
+You can integrate this with =gnus=, and email mode for Emacs. I have quite a bit of
+trouble with this due to the work firewall, so I've not gone that far... though I'd /love/ to
+handle my emails in Emacs! I often copy/paste snippets from eamils into an Org-mode
+journal tree so I don't have to keep things in my inbox anyway.
+
+* Example analysis
+
+For the last section, I want to go through how I typically set up experimental data
+analyses, as well as commenting on some of the code-related features. My analyses are
+typically on project-specific data as the result of some test or set of experiments. If
+it's really quick, I'll just write things up in my main notes file and, if needed, export
+just the subtree (we'll get to that).
+
+If the experiment warrants some more serious analysis and a writeup/presentation, I'll often create a
+dedicated folder for it. My structure tends to look like this:
+
+#+begin_src shell :exports both :results verbatim :eval no
+
+tree --dirsfirst
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+.
+├── data
+├── img
+├── plots
+└── demo_article.org
+
+3 directories, 1 file
+#+end_example
+
+Lately, I've been going through data from the same machine on different samples, which
+can generate an awful lot of files. My preference has been to create a master file with
+ids/data/file names of the samples, and then read the raw data into a list based on that
+file. 
+
+I typically use an initial block, set not to export, to do the preliminary
+read-in/processing. This way, I run it once and then set to =:eval no= so it doesn't
+re-run each export (the results are already in the R session).
+
+** setup							   :noexport:
+
+Here's where I read in and process the individual files into a complete data frame. I'll
+often edit this interactively with =C-c '=. =C-RET= runs a line or highlighted region
+(highlight with =C-space= followed by moving the cursor).
+
+I rarely get the code right the first time, so this lets me do a little trial and error on
+the data set to make sure it's sane and identify how I need to process it before moving on
+to generating conclusions or statistics on the results.
+
+#+begin_src R :session r :exports none :results silent :eval yes 
+
+library(ggplot2)
+library(reshape2)
+library(plyr)
+library(ascii)
+options(asciiType = "org")
+
+setwd("~/vault/personal/presentations/tcrug_org-mode/demo")
+
+ids <- read.csv("./data/exp-ids_2016-01-15.csv", colClasses = c("file" = "character"))
+
+data_list <- lapply(1:(nrow(ids)), function(i)
+{
+
+  id <- ids[i, "base"]
+  rep <- ids[i, "rep"]
+    
+  temp <- read.csv(paste0("./data/", ids[i, "file"]))
+  names(temp) <- c("x", "y")
+  temp$id <- rep(id, nrow(temp))
+  temp$rep <- rep(rep, nrow(temp))
+
+  spike <- which(temp$y > 300)
+  spike <- spike[length(spike)] + 10
+  spike <- spike[length(spike)]
+   
+  temp <- temp[spike:nrow(temp), ]
+    
+  temp$y <- temp$y - temp$y[1]
+  temp$x <- temp$x - min(temp$x)
+
+  flat <- which(temp$y < -2)
+  flat <- flat[1] + 55
+  temp <- temp[flat:nrow(temp), ]  
+
+  temp$x <- temp$x - min(temp$x)
+  temp$y <- -(temp$y - max(temp$y))
+
+  temp$i <- 1:(nrow(temp))
+  temp <- temp[temp$x < 120, ]  
+    
+  return(temp)
+
+})
+
+data <- do.call(rbind, data_list)
+
+data$grp <- paste0(data$id, "_", data$rep)
+
+ggplot(data, aes(x = x, y = y, group = grp)) + geom_line()
+
+stats <- ddply(data, .(id, rep), summarize,
+               grp = unique(grp),
+               x_max = max(x),
+               y_max = max(y),
+               rate = y_max / x_max)
+stats$delta <- (500 / stats$rate) - (500 / max(stats$rate))
+
+#+end_src
+
+** Experimental results
+
+From here, I often generate a "prettier" plot for use in my report or presentation. I also
+noticed an issue with =samp_1_1= when I generated it, so I'd opt to prune it as I think the
+test data is suspect.
+
+To use =:results output graphics=, you  have to specify an output file with =:file=. You
+can keep lines shorter by adding as many =#+header:= lines as you want (which supplements
+the options passed after =#+begin_src=. You need a =#+name= for the code block so that if
+you change code and re-run, Org-mode knows to update the original results block vs. adding
+one each time you execute.
+
+#+name: rate-compare
+#+header: :file ./plots/rate-comparison.png :width 1600 :height 900 :res 200
+#+begin_src R :session r :exports results :results output graphics 
+
+data_sub <- data[data$grp != "samp_1_1", ]
+
+p <- ggplot(data_sub, aes(x = x, y = y, group = grp, colour = id))
+p <- p + geom_line() + theme_bw()
+p <- p + scale_x_continuous("measurement (unit)")
+p <- p + scale_y_continuous("measurement (unit)")
+p
+
+#+end_src
+
+You can add backend-specific formatting options to the results. Here is the default
+generate Org-mode code to include results:
+
+#+begin_example 
+#+RESULTS: rate-compare
+[[file:./plots/rate-comparison.png]]
+#+end_example
+
+For PDF, I typically center and adjust size as desired:
+
+#+begin_example
+#+begin_center
+#+caption: Rate comparison of samples 1-4
+#+attr_latex: :width 0.9\textwidth
+#+attr_html: :width 75%
+#+RESULTS: rate-compare
+[[file:./plots/rate-comparison.png]]
+#+end_center
+#+end_example
+
+#+begin_center
+#+caption: Rate comparison of samples 1-4
+#+attr_latex: :width 0.9\textwidth
+#+attr_html: :width 75%
+#+RESULTS: rate-compare
+[[file:./plots/rate-comparison.png]]
+#+end_center
+
+I also quite enjoy the =ascii= package, as it has a mode to turn a data frame into
+Org-mode table format:
+
+#+begin_src R :session r :exports both :results output raw
+
+stats <- stats[stats$grp != "samp_1_1", ]
+stat_table <- ascii(stats, include.rownames = F,
+              rownames = rep("", 6), colnames = names(stats))
+print(stat_table)
+
+#+end_src
+
+#+RESULTS:
+| id     |  rep | grp      |  x_max |  y_max | rate | delta |
+|--------+------+----------+--------+--------+------+-------|
+| samp_1 | 2.00 | samp_1_2 | 119.88 | 258.82 | 2.16 | 13.02 |
+| samp_2 | 1.00 | samp_2_1 | 119.90 | 255.33 | 2.13 | 16.23 |
+| samp_3 | 1.00 | samp_3_1 | 119.90 | 272.75 | 2.27 |  1.22 |
+| samp_4 | 1.00 | samp_4_1 | 119.90 | 274.27 | 2.29 |  0.00 |
+
+You can have =R= spit out Org-mode syntax as well, which is nice for repetitive
+operations. You could process numerous text files and create a headline for each one. I
+used this to input a =.csv= with budget data for 3M groups, outputting a reference cheat
+sheet with account numbers and the next year's budget for each group chair in a separate
+subtree. It's a little tedious (lots of =cat()= lines), but for ~40 groups, it was well
+worth it.
+
+** Conclusion
+
+That's it for the quick demo. You can copy these code blocks or results to any other
+Org-mode file, which I find particularly useful when writing up a larger report but
+needing to present a synopsis at a team meeting, for example. With thoughful path
+definitions (or just going with absolute paths), you can often copy these with very
+minimal adjustments (usually only the =:width= or =:height= options to the graphic, which
+I'll often change with =M-x replace-string=.
+
+While this was =R= focused, Org-mode supports a lot of [[http://orgmode.org/worg/org-contrib/babel/languages.html][languages]]. I like that you can
+intersperse them freely, and hand off data (or save to =.csv= with one, then
+process/analyze with another). I've just started getting into =python=, and would like to
+save myself a step by having Org-mode house my sensor reading /and/ my processing/plotting
+rather than having them be separate steps.
+
+* Footnotes
+
+[fn:1] You can also set files Org-mode agenda via commands listed [[http://orgmode.org/manual/Agenda-files.html#Agenda-files][here]].
+
+[fn:8] Dye, Thomas S. /Structure and Growth of the Leeward Kohala Field System: An
+  Analysis with Directed Graphs/. PlosONE. http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0102431 
+
+[fn:9] Schulte, Eric; Davison, Dan; Dye, Thomas S; Dominik, Carsten. /A Multi-Language Computing Environment for Literate Programming and Reproducible Research/. 
+Journal of Statistical Software. http://www.jstatsoft.org/article/view/v046i03
+
+
+
+
+
+
+
+
+
+
+
